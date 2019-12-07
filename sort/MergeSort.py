@@ -5,7 +5,10 @@
 
 def solve(array):
     def merge_sort(array: list):
-        def merge(array, left, mid, right, tmp):
+        tmp = array.copy()
+
+        def merge(array, left, right):
+            mid = (left + right) >> 1
             i = left
             j = mid + 1
             k = left
@@ -13,33 +16,34 @@ def solve(array):
                 if array[i] <= array[j]:
                     tmp[k] = array[i]
                     i += 1
-                    k += 1
                 else:
                     tmp[k] = array[j]
                     j += 1
-                    k += 1
+                k += 1
+
             while i <= mid:
                 tmp[k] = array[i]
                 i += 1
                 k += 1
+
             while j <= right:
                 tmp[k] = array[j]
                 j += 1
                 k += 1
+            # copy tmp to array
+            array[left: right + 1] = tmp[left: right + 1]
 
-            array[left:right + 1] = tmp[left:right + 1]
-
-        def core(l, r, array: list, tmp: list):
+        def core(l, r, array: list):
             if l < r:
                 mid = (l + r) >> 1
-                core(l, mid, array, tmp)
-                core(mid + 1, r, array, tmp)
-                merge(array, l, mid, r, tmp)
+                core(l, mid, array)
+                core(mid + 1, r, array)
+                merge(array, l, r)
 
-        tmp = array.copy()
-        core(0, len(array) - 1, array, tmp)
+        core(0, len(array) - 1, array)
 
     merge_sort(array)
+    return array
 
 
 if __name__ == '__main__':
