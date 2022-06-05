@@ -1,0 +1,44 @@
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
+# Created by Ross
+
+
+def get_in_degreee_zero(graph, visited):
+    """
+    get node where node's in degress equal 0.
+    """
+    node2in_degree = {node: 0 for node in graph.keys() if node not in visited}
+
+    for _from, to_nodes in graph.items():
+        if _from in visited:
+            continue
+        for to_node in to_nodes:
+            node2in_degree[to_node] += 1
+    return [node for node, in_degress in node2in_degree.items() if in_degress == 0]
+
+
+def topological_sort(graph):
+    """topological sort"""
+    result = []
+    visited = set()
+    in_degress_zero_nodes = get_in_degreee_zero(graph, visited)
+    while in_degress_zero_nodes:
+        result.extend(in_degress_zero_nodes)
+        visited.update(in_degress_zero_nodes)
+        in_degress_zero_nodes = get_in_degreee_zero(graph, visited)
+    return result
+
+
+if __name__ == '__main__':
+    g = {
+        'A': ['C', 'D'],
+        'B': ['D'],
+        'C': ['E', 'F'],
+        'D': ['F', 'G'],
+        'E': [],
+        'F': ['H'],
+        'G': ['H'],
+        'H': []
+    }
+    res = topological_sort(g)
+    print(res)
